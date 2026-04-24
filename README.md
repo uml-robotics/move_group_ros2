@@ -32,6 +32,12 @@ This package depends on the following:
 - moveit_ros_planning_interface
 - moveit_msgs
 - visualization_msgs
+- sensor_msgs
+- std_msgs
+- tf2
+- tf2_ros
+- tf2_geometry_msgs
+- tf2_sensor_msgs
 ```
 
 ## Important Conditional Dependency:
@@ -96,6 +102,7 @@ def launch_setup(context, *args, **kwargs):
 | `/move_to_pose_service` | `srv/MoveToPose` | Given a *string* **target_name**, move to the pose as defined in the robot's srdf with that name |
 | `/move_to_named_pose_service` | `srv/MoveToNamedPose` | Move to the *geometry_msgs/PoseStamped* **target_pose** using the default planner (typically OMPL unless defined otherwise) |
 | `/cartesian_move_to_pose_service` | `srv/CartesianMoveToPose` | Given *geometry_msgs/Pose[]* **waypoints**, move along a cartesian path to those waypoints (one or more) in order |
+| `/reach_to_grasp_service` | `srv/MoveToPose` | A sequence of movements from pre-grasp pose to reach to grasp, pick up, and release object |
 
 ## Implementation
 
