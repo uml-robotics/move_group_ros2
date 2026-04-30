@@ -49,7 +49,8 @@ private:
       m.id = 0;
       m.type = visualization_msgs::msg::Marker::SPHERE;
       m.action = visualization_msgs::msg::Marker::ADD;
-      m.pose = req->target_pose;              // exactly what you're planning to
+      // m.pose = req->target_pose;              // exactly what you're planning to
+      m.pose = req->target_pose.pose;
       m.scale.x = m.scale.y = m.scale.z = 0.03;
       m.color.a = 1.0; m.color.r = 0.1; m.color.g = 0.8; m.color.b = 0.2;
       marker_pub_->publish(m);
@@ -80,19 +81,19 @@ private:
       }
 
       // Additional step test: Lift vertically in base frame (planning frame)
-    //   bool flg_liftUp = moveInBaseZ(req, 0.05);
-    //   if (flg_liftUp)
-    //   {
-    //     res->success = true;
-    //     RCLCPP_INFO(this->get_logger(), "Motion to lift object succeeded.");
-    //     return;
-    //   }
-    //   else
-    //   {
-    //     res->success = false;
-    //     RCLCPP_ERROR(this->get_logger(),"Failed to lift object.");
-    //     return;
-    //   }
+      bool flg_liftUp = moveInBaseZ(req, 0.05);
+      if (flg_liftUp)
+      {
+        res->success = true;
+        RCLCPP_INFO(this->get_logger(), "Motion to lift object succeeded.");
+        return;
+      }
+      else
+      {
+        res->success = false;
+        RCLCPP_ERROR(this->get_logger(),"Failed to lift object.");
+        return;
+      }
       
     }      
     catch (const std::exception &e)
@@ -107,10 +108,17 @@ private:
     const std::string ee_link = move_group_->getEndEffectorLink();
     // geometry_msgs::msg::PoseStamped current = move_group_->getCurrentPose(ee_link);
 
-    geometry_msgs::msg::Pose target = req->target_pose; // current.pose;
-    target.position.z += dz;  // base frame Z
+    // geometry_msgs::msg::Pose target = req->target_pose; // current.pose;
+    // target.position.z += dz;  // base frame Z
 
-    RCLCPP_INFO(this->get_logger(), "target.position.z = %f", target.position.z);
+    // RCLCPP_INFO(this->get_logger(), "target.position.z = %f", target.position.z);
+
+    // move_group_->setPoseTarget(target, ee_link);
+
+    geometry_msgs::msg::PoseStamped target = req->target_pose;
+    target.pose.position.z += dz;
+
+    RCLCPP_INFO(this->get_logger(), "target.pose.position.z = %f", target.pose.position.z);
 
     move_group_->setPoseTarget(target, ee_link);
 

@@ -27,6 +27,8 @@ find_package(PCL REQUIRED)
 find_package(gpd_ros REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 
+find_package(std_srvs REQUIRED)
+
 # Generate service
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/CartesianMoveToPose.srv"
@@ -91,10 +93,16 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME})
 
 # Link generated service headers
+# rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
+# target_link_libraries(cartesian_move_to_pose_service ${cpp_typesupport_target})
+# target_link_libraries(move_to_named_pose_service ${cpp_typesupport_target})
+# target_link_libraries(move_to_pose_service ${cpp_typesupport_target})
+
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 target_link_libraries(cartesian_move_to_pose_service ${cpp_typesupport_target})
 target_link_libraries(move_to_named_pose_service ${cpp_typesupport_target})
 target_link_libraries(move_to_pose_service ${cpp_typesupport_target})
+target_link_libraries(reach_to_grasp_service ${cpp_typesupport_target})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

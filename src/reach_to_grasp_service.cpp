@@ -79,12 +79,19 @@ private:
     {
 
       // Use the requested pose as grasp pose in base frame
-      const geometry_msgs::msg::Pose& grasp_pose = req->target_pose;
+      // const geometry_msgs::msg::Pose& grasp_pose = req->target_pose;
 
-      geometry_msgs::msg::PoseStamped grasp_ps;
-      // grasp_ps.header.frame_id = "panda_link0";
-      grasp_ps.header.frame_id = arm_group_->getPlanningFrame();
-      grasp_ps.pose = grasp_pose;
+      // geometry_msgs::msg::PoseStamped grasp_ps;
+      // // grasp_ps.header.frame_id = "panda_link0";
+      // grasp_ps.header.frame_id = arm_group_->getPlanningFrame();
+      // grasp_ps.pose = grasp_pose;
+
+      geometry_msgs::msg::PoseStamped grasp_ps = req->target_pose;
+
+      if (grasp_ps.header.frame_id.empty())
+      {
+        grasp_ps.header.frame_id = arm_group_->getPlanningFrame();
+      }
 
       // 1) Open gripper
       if (!setGripper(open_gripper_joint_values_))
